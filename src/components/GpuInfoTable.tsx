@@ -1,6 +1,7 @@
 import {Button, Input, Table} from "antd";
 import {type GpuInfo} from "../data/gpuInfo.ts";
 import type {ColumnsType} from "antd/es/table";
+import { useState } from "react";
 
 const extractInteger = (value: string): number | undefined => {
     if (!value) return undefined;
@@ -81,21 +82,25 @@ const columns: ColumnsType<GpuInfo> = [
                     <Input
                         placeholder="最低价"
                         value={minValue}
+                        type={"number"}
                         onChange={(e) => {
                             const newMin = e.target.value;
                             const newValue = newMin || maxValue ? `${newMin}-${maxValue}` : '';
                             props.setSelectedKeys(newValue ? [newValue] : []);
                         }}
+                        onPressEnter={() => props.confirm()}
                         style={{ width: '100%', marginBottom: 8, display: 'block' }}
                     />
                     <Input
                         placeholder="最高价"
                         value={maxValue}
+                        type={"number"}
                         onChange={(e) => {
                             const newMax = e.target.value;
                             const newValue = minValue || newMax ? `${minValue}-${newMax}` : '';
                             props.setSelectedKeys(newValue ? [newValue] : []);
                         }}
+                        onPressEnter={() => props.confirm()}
                         style={{ width: '100%', marginBottom: 8, display: 'block' }}
                     />
                     <Button
@@ -182,6 +187,8 @@ const columns: ColumnsType<GpuInfo> = [
 ];
 
 function GpuInfoTable(props: { gpuInfos: GpuInfo[] }) {
+    const [pageSize, setPageSize] = useState(8);
+
     return (
         <>
             <Table
@@ -193,9 +200,12 @@ function GpuInfoTable(props: { gpuInfos: GpuInfo[] }) {
                     },
                     showQuickJumper: true,
                     showSizeChanger: true,
-                    pageSizeOptions: [10, 20, 50, 100]
+                    pageSize: pageSize,
+                    pageSizeOptions: [8, 16, 32],
+                    onShowSizeChange: (_, size) => {
+                        setPageSize(size);
+                    },
                 }}
-                scroll={{y: '75vh'}}
             />
         </>
     )
