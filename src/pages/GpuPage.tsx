@@ -1,13 +1,13 @@
-import GpuInfoTable from "../components/GpuInfoTable.tsx";
 import {useState} from "react";
-import {defaultGpuInfos} from "../data/gpuInfo.ts";
+import {GpuSpecTable} from "../components/GpuSpecTable.tsx";
+import {defaultGpuSpecs} from "../data/gpu_specs.ts";
 
 function GpuPage() {
-    const [gpuInfos] = useState(defaultGpuInfos)
+    const [gpuSpecs] = useState(defaultGpuSpecs)
 
     return (
         <div>
-            <GpuInfoTable gpuInfos={gpuInfos}/>
+            <GpuSpecTable gpuSpecs={gpuSpecs}/>
         </div>
     )
 }
