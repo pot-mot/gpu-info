@@ -21,11 +21,16 @@ export function GpuSelect(props: {
 
     return (
         <Select
+            style={{ width: '100%' }}
             placeholder="请选择GPU型号"
             options={options}
             value={value}
             onChange={handleChange}
             onClear={() => onChange?.(undefined)}
+            showSearch={{
+                optionFilterProp: 'label',
+            }}
+            allowClear
         />
     );
 }
