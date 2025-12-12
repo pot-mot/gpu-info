@@ -37,9 +37,11 @@ export function HomePage() {
                         >
                             <h3 className="gpu-name">{gpu.name}</h3>
                             <div className="gpu-specs">
-                                <p><strong>价格:</strong> {gpu.price} 元</p>
-                                <p><strong>显存:</strong> {gpu.memory_size_gb}GB</p>
-                                <p><strong>频率:</strong> {gpu.boost_clock_mhz}</p>
+                                <p><strong>价格</strong> {gpu.price === undefined ? 'N/A' :
+                                    typeof gpu.price === 'number' ? "$" + gpu.price : gpu.price
+                                }</p>
+                                <p><strong>显存</strong> {gpu.memory_size_gb} GB</p>
+                                <p><strong>频率</strong> {gpu.boost_clock_mhz} MHz</p>
                             </div>
                         </div>
                     ))}
