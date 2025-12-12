@@ -1,13 +1,15 @@
-import type { GpuSpec } from "../data/gpu_specs.ts";
-import { Select } from "antd";
-import type { SelectProps } from "antd";
+import type {GpuSpec} from "../data/gpu_specs.ts";
+import {Select} from "antd";
+import type {SelectProps} from "antd";
+import type {CSSProperties} from "react";
 
 export function GpuSelect(props: {
     gpuSpecs: GpuSpec[];
     value?: string;
+    style?: CSSProperties;
     onChange?: (spec: GpuSpec | undefined) => void;
 }) {
-    const { gpuSpecs, value, onChange } = props;
+    const {gpuSpecs, value, onChange} = props;
 
     const options = gpuSpecs.map(spec => ({
         label: spec.name,
@@ -21,7 +23,7 @@ export function GpuSelect(props: {
 
     return (
         <Select
-            style={{ width: '100%' }}
+            style={{width: '100%', ...props.style}}
             placeholder="请选择GPU型号"
             options={options}
             value={value}

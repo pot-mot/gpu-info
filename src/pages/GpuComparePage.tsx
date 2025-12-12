@@ -6,7 +6,7 @@ import {GpuCompareView} from "../components/GpuCompareView.tsx";
 import {Switch} from "antd";
 
 export function GpuComparePage() {
-    const [searchParams] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams();
     const leftId = searchParams.get('left')
     const rightId = searchParams.get('right')
 
@@ -15,11 +15,13 @@ export function GpuComparePage() {
     const handleLeftChange = (spec: GpuSpec | undefined) => {
         setLeftGpu(spec)
         searchParams.set('left', spec?.id ?? '')
+        setSearchParams(searchParams)
     }
     const [rightGpu, setRightGpu] = useState<GpuSpec | undefined>(gpuSpecs.find(spec => spec.id === rightId))
     const handleRightChange = (spec: GpuSpec | undefined) => {
         setRightGpu(spec)
         searchParams.set('right', spec?.id ?? '')
+        setSearchParams(searchParams)
     }
 
     const [showDiffOnly, setShowDiffOnly] = useState(true)
@@ -37,16 +39,24 @@ export function GpuComparePage() {
                     gpuSpecs={gpuSpecs}
                     value={leftGpu?.id}
                     onChange={handleLeftChange}
+                    style={{
+                        fontSize: '1.25rem',
+                        fontWeight: '600',
+                    }}
                 />
                 <GpuSelect
                     gpuSpecs={gpuSpecs}
                     value={rightGpu?.id}
                     onChange={handleRightChange}
+                    style={{
+                        fontSize: '1.25rem',
+                        fontWeight: '600',
+                    }}
                 />
             </div>
 
             <div style={{ textAlign: 'center', margin: '0.5rem 0' }}>
-                <label>只显示差异</label>
+                <label style={{paddingRight: '0.5rem'}}>只显示差异</label>
                 <Switch value={showDiffOnly} onChange={setShowDiffOnly}/>
             </div>
 
