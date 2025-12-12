@@ -4,6 +4,7 @@ import { useState } from "react";
 import {type GpuSpec} from "../data/gpu_specs.ts";
 import {extractFirstNumber, numberSorter} from "../utils/number.ts";
 import { RangeFilter } from "./RangeFilter.tsx";
+import { Link } from "react-router";
 
 export function GpuSpecTable(props: { gpuSpecs: GpuSpec[] }) {
     const [pageSize, setPageSize] = useState(8);
@@ -28,6 +29,7 @@ export function GpuSpecTable(props: { gpuSpecs: GpuSpec[] }) {
             key: 'name',
             fixed: 'start',
             width: 200,
+            render: (_, record) => <Link to={`/gpu/${record.id}`}>{record.name}</Link>,
             filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
                 <div style={{ padding: 8 }}>
                     <Input
@@ -113,7 +115,6 @@ export function GpuSpecTable(props: { gpuSpecs: GpuSpec[] }) {
             key: 'price',
             width: 120,
             render: (price) => {
-                console.log(typeof price === "number", price === undefined, !isNaN(price), price)
                 const priceStr: string =
                     price === undefined ? 'N/A' :
                         typeof price === 'number' ? "$" + price : price;

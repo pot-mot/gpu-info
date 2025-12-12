@@ -1,12 +1,19 @@
 import {defaultGpuSpecs} from '../data/gpu_specs.ts'
 import {numberSorter} from "../utils/number.ts";
+import {useNavigate} from "react-router";
 
 export function HomePage() {
+    const navigate = useNavigate();
+
     // 获取热门GPU
     const topGpus = defaultGpuSpecs
         .filter(gpu => (gpu.memory_size_gb ?? 0) > 20)
         .sort((a, b) => numberSorter(b.price, a.price, 'descend'))
         .slice(0, 6)
+
+    const handleGpuClick = (gpuId: string) => {
+        navigate(`/gpu/${gpuId}`); // 跳转到对应 GPU 的详情页面
+    };
 
     return (
         <div className="home-page">
@@ -23,7 +30,11 @@ export function HomePage() {
                 <h2 className="section-title">热门GPU推荐</h2>
                 <div className="gpu-grid">
                     {topGpus.map((gpu) => (
-                        <div className="gpu-card">
+                        <div
+                            className="gpu-card"
+                            key={gpu.id}
+                            onClick={() => handleGpuClick(gpu.id)}
+                        >
                             <h3 className="gpu-name">{gpu.name}</h3>
                             <div className="gpu-specs">
                                 <p><strong>价格:</strong> {gpu.price} 元</p>

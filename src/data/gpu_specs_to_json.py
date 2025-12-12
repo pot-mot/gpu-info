@@ -19,7 +19,7 @@ def convert_excel_to_js_object(excel_file_path, output_file_path):
 
     # 生成TypeScript接口定义
     def generate_typescript_interface():
-        interface_def = "export type GpuSpec = {\n"
+        interface_def = "export type GpuSpec = {\n" + "    id: string\n"
 
         for column in dataframe.columns:
             # 简单推断类型（可以根据实际需求扩展）
@@ -54,6 +54,7 @@ def convert_excel_to_js_object(excel_file_path, output_file_path):
         # 逐行写入每条记录
         for i, record in enumerate(gpu_data):
             f.write(f"const Record{i}: GpuSpec = ")
+            record['id'] = str(i)
             json_str = json.dumps(record, indent=4, ensure_ascii=False, cls=CustomJSONEncoder)
             json_str = re.sub(key_regex, r'\1: ', json_str)
             json_str = json_str.replace(" null", " undefined")
