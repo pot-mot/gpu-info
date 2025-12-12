@@ -22,12 +22,15 @@ export function GpuDetailPage() {
     }
 
     const handleCompareClick = (gpuId: string) => {
-        navigate(`/gpu/compare/${gpuId}`); // 跳转到对应 GPU 的详情页面
+        navigate(`/gpu/compare?left=${gpuId}`); // 跳转到对应 GPU 的详情页面
     };
 
     return (
         <div>
-            <Button onClick={() => handleCompareClick(gpu.id)}>与其他GPU进行比较</Button>
+            <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                <h1>{gpu.name}</h1>
+                <Button onClick={() => handleCompareClick(gpu.id)}>与其他GPU进行比较</Button>
+            </div>
             <GpuInfo gpu={gpu} />
         </div>
     );
