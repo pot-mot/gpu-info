@@ -1,4 +1,4 @@
-import { createRoot } from 'react-dom/client'
+import {createRoot} from 'react-dom/client'
 import './index.css'
 import {HashRouter, Route, Routes} from "react-router"
 import GpuPage from "./pages/GpuPage.tsx"
@@ -12,13 +12,13 @@ import {GpuComparePage} from "./pages/GpuComparePage.tsx";
 createRoot(document.getElementById('root')!).render(
     <HashRouter>
         <Routes>
-            <Route path='/' element={<App />}>
-                <Route index={true} element={<HomePage />}></Route>
-                <Route path='/gpu' element={<GpuPage />}></Route>
-                <Route path='/gpu/:id' element={<GpuDetailPage />}></Route>
-                <Route path='/gpu/compare/:id' element={<GpuComparePage />}></Route>
-                <Route path='/brands' element={<BrandsPage />}></Route>
-                <Route path='/current' element={<CurrentGpuPage />}></Route>
+            <Route path='/' element={<App/>}>
+                <Route index={true} element={<HomePage/>}/>
+                <Route path='/gpu' element={<GpuPage/>}/>
+                <Route path='/gpu/:id' element={<GpuDetailPage/>}/>
+                <Route path='/gpu/compare' element={<GpuComparePage/>}/>
+                <Route path='/brands' element={<BrandsPage/>}/>
+                <Route path='/current' element={<CurrentGpuPage/>}/>
             </Route>
         </Routes>
     </HashRouter>
