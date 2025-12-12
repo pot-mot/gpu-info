@@ -7,6 +7,7 @@ import {HomePage} from "./pages/HomePage.tsx"
 import {BrandsPage} from "./pages/BrandsPage.tsx"
 import {GpuDetailPage} from "./pages/GpuDetailPage.tsx";
 import {CurrentGpuPage} from "./pages/CurrentGpuPage.tsx";
+import {GpuComparePage} from "./pages/GpuComparePage.tsx";
 
 createRoot(document.getElementById('root')!).render(
     <HashRouter>
@@ -15,6 +16,7 @@ createRoot(document.getElementById('root')!).render(
                 <Route index={true} element={<HomePage />}></Route>
                 <Route path='/gpu' element={<GpuPage />}></Route>
                 <Route path='/gpu/:id' element={<GpuDetailPage />}></Route>
+                <Route path='/gpu/compare/:id' element={<GpuComparePage />}></Route>
                 <Route path='/brands' element={<BrandsPage />}></Route>
                 <Route path='/current' element={<CurrentGpuPage />}></Route>
             </Route>
