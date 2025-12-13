@@ -1,13 +1,25 @@
 import {Button, Input, Table} from "antd";
 import type {ColumnsType} from "antd/es/table";
-import { useState } from "react";
+import {useState} from "react";
 import {type GpuSpec} from "../data/gpu_specs.ts";
 import {extractFirstNumber, numberSorter} from "../utils/number.ts";
-import { RangeFilter } from "./RangeFilter.tsx";
-import { Link } from "react-router";
+import {RangeFilter} from "./RangeFilter.tsx";
+import {Link} from "react-router";
+import {formatDollar} from "../utils/format.ts";
 
 export function GpuSpecTable(props: { gpuSpecs: GpuSpec[] }) {
-    const [pageSize, setPageSize] = useState(8);
+    const [pageSize, setPageSize] = useState(8)
+
+    const allManufacturer = Array.from(new Set(
+        props.gpuSpecs
+            .map(item => item.manufacturer)
+            .filter(it => it !== undefined)
+    )).sort((a, b) => a.localeCompare(b))
+    const allMemoryType = Array.from(new Set(
+        props.gpuSpecs
+            .map(item => item.memory_type)
+            .filter(it => it !== undefined)
+    )).sort((a, b) => a.localeCompare(b))
 
     const columns: ColumnsType<GpuSpec> = [
         {
@@ -15,12 +27,10 @@ export function GpuSpecTable(props: { gpuSpecs: GpuSpec[] }) {
             dataIndex: 'manufacturer',
             key: 'manufacturer',
             width: 120,
-            filters: Array.from(new Set(props.gpuSpecs.map(item => item.manufacturer)))
-                .filter(manufacturer => manufacturer !== undefined)
-                .map(manufacturer => ({
-                    text: manufacturer,
-                    value: manufacturer,
-                })),
+            filters: allManufacturer.map(manufacturer => ({
+                text: manufacturer,
+                value: manufacturer,
+            })),
             onFilter: (value, record) => record.manufacturer === value,
         },
         {
@@ -30,19 +40,19 @@ export function GpuSpecTable(props: { gpuSpecs: GpuSpec[] }) {
             fixed: 'start',
             width: 200,
             render: (_, record) => <Link to={`/gpu/${record.id}`}>{record.name}</Link>,
-            filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
-                <div style={{ padding: 8 }}>
+            filterDropdown: ({setSelectedKeys, selectedKeys, confirm, clearFilters}) => (
+                <div style={{padding: 8}}>
                     <Input
                         placeholder="搜索显卡型号"
                         value={selectedKeys[0]}
                         onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
                         onPressEnter={() => confirm()}
-                        style={{ width: 188, marginBottom: 8, display: 'block' }}
+                        style={{width: 188, marginBottom: 8, display: 'block'}}
                     />
                     <Button
                         onClick={() => confirm()}
                         size="small"
-                        style={{ width: 90, marginRight: 8 }}
+                        style={{width: 90, marginRight: 8}}
                     >
                         确定
                     </Button>
@@ -52,7 +62,7 @@ export function GpuSpecTable(props: { gpuSpecs: GpuSpec[] }) {
                             confirm();
                         }}
                         size="small"
-                        style={{ width: 90 }}
+                        style={{width: 90}}
                     >
                         重置
                     </Button>
@@ -76,19 +86,19 @@ export function GpuSpecTable(props: { gpuSpecs: GpuSpec[] }) {
                 },
                 multiple: 3
             },
-            filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
-                <div style={{ padding: 8 }}>
+            filterDropdown: ({setSelectedKeys, selectedKeys, confirm, clearFilters}) => (
+                <div style={{padding: 8}}>
                     <Input
                         placeholder="搜索年份"
                         value={selectedKeys[0]}
                         onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
                         onPressEnter={() => confirm()}
-                        style={{ width: 188, marginBottom: 8, display: 'block' }}
+                        style={{width: 188, marginBottom: 8, display: 'block'}}
                     />
                     <Button
                         onClick={() => confirm()}
                         size="small"
-                        style={{ width: 90, marginRight: 8 }}
+                        style={{width: 90, marginRight: 8}}
                     >
                         确定
                     </Button>
@@ -98,7 +108,7 @@ export function GpuSpecTable(props: { gpuSpecs: GpuSpec[] }) {
                             confirm();
                         }}
                         size="small"
-                        style={{ width: 90 }}
+                        style={{width: 90}}
                     >
                         重置
                     </Button>
@@ -114,12 +124,7 @@ export function GpuSpecTable(props: { gpuSpecs: GpuSpec[] }) {
             dataIndex: 'price',
             key: 'price',
             width: 120,
-            render: (price) => {
-                const priceStr: string =
-                    price === undefined ? 'N/A' :
-                        typeof price === 'number' ? "$" + price : price;
-                return (<span>{priceStr}</span>)
-            },
+            render: (_, record) => (<span>{formatDollar(record.price)}</span>),
             sortDirections: ['descend', 'ascend'],
             defaultSortOrder: 'descend',
             sorter: {
@@ -208,12 +213,10 @@ export function GpuSpecTable(props: { gpuSpecs: GpuSpec[] }) {
             dataIndex: 'memory_type',
             key: 'memory_type',
             width: 150,
-            filters: Array.from(new Set(props.gpuSpecs.map(item => item.memory_type)))
-                .filter(memory_type => memory_type !== undefined)
-                .map(memory_type => ({
-                    text: memory_type,
-                    value: memory_type,
-                })),
+            filters: allMemoryType.map(memory_type => ({
+                text: memory_type,
+                value: memory_type,
+            })),
             onFilter: (value, record) => record.memory_type === value,
         },
         {
@@ -263,7 +266,7 @@ export function GpuSpecTable(props: { gpuSpecs: GpuSpec[] }) {
             <Table
                 dataSource={props.gpuSpecs}
                 columns={columns}
-                scroll={{ x: 'max-content' }}
+                scroll={{x: 'max-content'}}
                 tableLayout={'fixed'}
                 sticky={true}
                 pagination={{
