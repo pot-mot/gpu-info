@@ -1,448 +1,394 @@
 import type {GpuSpec} from "../data/gpu_specs.ts";
 import {Divider} from 'antd';
-import {formatValueWithUnit} from "../utils/format.ts";
-
-const GOOD_COLOR = "#80ca28"
-const BAD_COLOR = "#f81717"
+import {CompareItem, NumberCompareItem, StringCompareItem} from "./CompareItem.tsx";
+import {formatDollar, versionStringify} from "../utils/format.ts";
+import {extractFirstNumber} from "../utils/number.ts";
 
 export function GpuCompareView(props: {
     left: GpuSpec | undefined,
     right: GpuSpec | undefined,
     showDiffOnly: boolean
 }) {
-    const renderComparisonItem = (
-        label: string,
-        leftValue: string | number | undefined,
-        rightValue: string | number | undefined,
-        unit: string | undefined = undefined,
-        isGood: (leftValue: number, rightValue: number) => boolean = (leftValue, rightValue) => {
-            return leftValue >= rightValue
-        }
-    ) => {
-        if (props.showDiffOnly && leftValue === rightValue) return null
-
-        // 在这里进行格式化
-        const formattedLeftValue = typeof leftValue === 'number' || typeof leftValue === 'string'
-            ? formatValueWithUnit(leftValue, unit)
-            : leftValue ?? 'N/A';
-
-        const formattedRightValue = typeof rightValue === 'number' || typeof rightValue === 'string'
-            ? formatValueWithUnit(rightValue, unit)
-            : rightValue ?? 'N/A';
-
-
-        if (typeof leftValue === "number" && typeof rightValue === "number") {
-            const bigger = Math.max(leftValue, rightValue)
-            const isLeftGood = isGood(leftValue, rightValue)
-            const isRightGood = isGood(rightValue, leftValue)
-
-            return (
-                <>
-                    <div style={{
-                        lineHeight: '2rem',
-                        fontSize: '1rem',
-                        textAlign: 'center'
-                    }}>
-                        {label}
-                    </div>
-                    <div style={{lineHeight: '1.5rem', fontSize: '1rem', display: 'grid', gridTemplateColumns: ' 10rem 1fr 1fr 10rem'}}>
-                        <div style={{textAlign: 'left'}}>
-                            {formattedLeftValue}
-                        </div>
-                        <div style={{display: 'flex', justifyContent: 'flex-end', height: '100%', alignItems: 'center'}}>
-                            <div
-                                style={{
-                                    width: (leftValue * 100 / bigger) + "%",
-                                    height: '10px',
-                                    backgroundColor: isLeftGood ? GOOD_COLOR : BAD_COLOR,
-                                    borderRadius: '5px 0 0 5px'
-                                }}
-                            />
-                        </div>
-                        <div style={{display: 'flex', justifyContent: 'flex-start', height: '100%', alignItems: 'center'}}>
-                            <div
-                                style={{
-                                    width: (rightValue * 100 / bigger) + "%",
-                                    height: '10px',
-                                    backgroundColor: isRightGood ? GOOD_COLOR : BAD_COLOR,
-                                    borderRadius: '0 5px 5px 0'
-                                }}
-                            />
-                        </div>
-                        <div style={{textAlign: 'right'}}>
-                            {formattedRightValue}
-                        </div>
-                    </div>
-                </>
-            )
-        }
-
-        return (
-            <>
-                <div style={{
-                    lineHeight: '2rem',
-                    fontSize: '1rem',
-                    textAlign: 'center'
-                }}>
-                    {label}
-                </div>
-                <div style={{
-                    lineHeight: '1.5rem',
-                    fontSize: '1rem',
-                    display: 'grid',
-                    gridTemplateColumns: '1fr 1fr'
-                }}>
-                    <div style={{textAlign: 'left'}}>
-                        {formattedLeftValue}
-                    </div>
-                    <div style={{textAlign: 'right'}}>
-                        {formattedRightValue}
-                    </div>
-                </div>
-            </>
-        );
-    };
-
     return (
         <div>
             <Divider orientation="horizontal">基础信息</Divider>
 
-            {renderComparisonItem(
-                "制造商",
-                props.left?.manufacturer ?? 'N/A',
-                props.right?.manufacturer ?? 'N/A'
-            )}
+            <StringCompareItem
+                label="制造商"
+                leftValue={props.left?.manufacturer}
+                rightValue={props.right?.manufacturer}
+                showDiffOnly={props.showDiffOnly}
+            />
 
-            {renderComparisonItem(
-                "GPU芯片",
-                props.left?.gpu_name ?? 'N/A',
-                props.right?.gpu_name ?? 'N/A'
-            )}
+            <StringCompareItem
+                label="GPU芯片"
+                leftValue={props.left?.gpu_name}
+                rightValue={props.right?.gpu_name}
+                showDiffOnly={props.showDiffOnly}
+            />
 
-            {renderComparisonItem(
-                "世代",
-                props.left?.generation ?? 'N/A',
-                props.right?.generation ?? 'N/A'
-            )}
+            <StringCompareItem
+                label="世代"
+                leftValue={props.left?.generation}
+                rightValue={props.right?.generation}
+                showDiffOnly={props.showDiffOnly}
+            />
 
-            {renderComparisonItem(
-                "架构",
-                props.left?.architecture ?? 'N/A',
-                props.right?.architecture ?? 'N/A'
-            )}
+            <StringCompareItem
+                label="架构"
+                leftValue={props.left?.architecture}
+                rightValue={props.right?.architecture}
+                showDiffOnly={props.showDiffOnly}
+            />
 
-            {renderComparisonItem(
-                "晶圆厂",
-                props.left?.foundry ?? 'N/A',
-                props.right?.foundry ?? 'N/A'
-            )}
+            <StringCompareItem
+                label="晶圆厂"
+                leftValue={props.left?.foundry}
+                rightValue={props.right?.foundry}
+                showDiffOnly={props.showDiffOnly}
+            />
 
-            {renderComparisonItem(
-                "工艺制程",
-                props.left?.process_size_nm ?? 'N/A',
-                props.right?.process_size_nm ?? 'N/A',
-                'nm',
-                (leftValue, rightValue) => {
-                    return leftValue <= rightValue
-                }
-            )}
+            <NumberCompareItem
+                label="工艺制程"
+                leftValue={props.left?.process_size_nm}
+                rightValue={props.right?.process_size_nm}
+                unit="nm"
+                numberCompare={(left, right) => left < right}
+                showDiffOnly={props.showDiffOnly}
+            />
 
-            {renderComparisonItem(
-                "晶体管数量",
-                props.left?.transistor_count_m,
-                props.right?.transistor_count_m,
-                'M'
-            )}
+            <NumberCompareItem
+                label="晶体管数量"
+                leftValue={props.left?.transistor_count_m}
+                rightValue={props.right?.transistor_count_m}
+                unit="M"
+                showDiffOnly={props.showDiffOnly}
+            />
 
-            {renderComparisonItem(
-                "晶体管密度",
-                props.left?.transistor_density_k_mm2,
-                props.right?.transistor_density_k_mm2,
-                'K/mm²'
-            )}
+            <NumberCompareItem
+                label="晶体管密度"
+                leftValue={props.left?.transistor_density_k_mm2}
+                rightValue={props.right?.transistor_density_k_mm2}
+                unit="K/mm²"
+                showDiffOnly={props.showDiffOnly}
+            />
 
-            {renderComparisonItem(
-                "芯片面积",
-                props.left?.die_size_mm2,
-                props.right?.die_size_mm2,
-                'mm²'
-            )}
+            <NumberCompareItem
+                label="芯片面积"
+                leftValue={props.left?.die_size_mm2}
+                rightValue={props.right?.die_size_mm2}
+                unit="mm²"
+                showDiffOnly={props.showDiffOnly}
+            />
 
-            {renderComparisonItem(
-                "封装类型",
-                props.left?.chip_package ?? 'N/A',
-                props.right?.chip_package ?? 'N/A'
-            )}
+            <StringCompareItem
+                label="封装类型"
+                leftValue={props.left?.chip_package}
+                rightValue={props.right?.chip_package}
+                showDiffOnly={props.showDiffOnly}
+            />
 
-            {renderComparisonItem(
-                "发布日期",
-                props.left?.release_date ? new Date(props.left?.release_date).toLocaleDateString() : 'N/A',
-                props.right?.release_date ? new Date(props.right?.release_date).toLocaleDateString() : 'N/A',
-                undefined,
-            )}
+            <StringCompareItem
+                label="发布日期"
+                leftValue={props.left?.release_date ? new Date(props.left?.release_date).toLocaleDateString() : undefined}
+                rightValue={props.right?.release_date ? new Date(props.right?.release_date).toLocaleDateString() : undefined}
+                showDiffOnly={props.showDiffOnly}
+            />
 
-            {renderComparisonItem(
-                "总线接口",
-                props.left?.bus_interface ?? 'N/A',
-                props.right?.bus_interface ?? 'N/A'
-            )}
+            <StringCompareItem
+                label="总线接口"
+                leftValue={props.left?.bus_interface}
+                rightValue={props.right?.bus_interface}
+                showDiffOnly={props.showDiffOnly}
+            />
 
             <Divider orientation="horizontal">核心频率</Divider>
 
-            {renderComparisonItem(
-                "基础频率",
-                props.left?.base_clock_mhz,
-                props.right?.base_clock_mhz,
-                'MHz'
-            )}
+            <NumberCompareItem
+                label="基础频率"
+                leftValue={props.left?.base_clock_mhz}
+                rightValue={props.right?.base_clock_mhz}
+                unit="MHz"
+                showDiffOnly={props.showDiffOnly}
+            />
 
-            {renderComparisonItem(
-                "加速频率",
-                props.left?.boost_clock_mhz,
-                props.right?.boost_clock_mhz,
-                'MHz'
-            )}
+            <NumberCompareItem
+                label="加速频率"
+                leftValue={props.left?.boost_clock_mhz}
+                rightValue={props.right?.boost_clock_mhz}
+                unit="MHz"
+                showDiffOnly={props.showDiffOnly}
+            />
 
             <Divider orientation="horizontal">显存规格</Divider>
 
-            {renderComparisonItem(
-                "显存频率",
-                props.left?.memory_clock_mhz,
-                props.right?.memory_clock_mhz,
-                'MHz'
-            )}
+            <NumberCompareItem
+                label="显存频率"
+                leftValue={props.left?.memory_clock_mhz}
+                rightValue={props.right?.memory_clock_mhz}
+                unit="MHz"
+                showDiffOnly={props.showDiffOnly}
+            />
 
-            {renderComparisonItem(
-                "显存容量",
-                props.left?.memory_size_gb,
-                props.right?.memory_size_gb,
-                'GB'
-            )}
+            <NumberCompareItem
+                label="显存容量"
+                leftValue={props.left?.memory_size_gb}
+                rightValue={props.right?.memory_size_gb}
+                unit="GB"
+                showDiffOnly={props.showDiffOnly}
+            />
 
-            {renderComparisonItem(
-                "显存位宽",
-                props.left?.memory_bus_bits,
-                props.right?.memory_bus_bits,
-                'bit'
-            )}
+            <NumberCompareItem
+                label="显存位宽"
+                leftValue={props.left?.memory_bus_bits}
+                rightValue={props.right?.memory_bus_bits}
+                unit="bit"
+                showDiffOnly={props.showDiffOnly}
+            />
 
-            {renderComparisonItem(
-                "显存带宽",
-                props.left?.memory_bandwidth_gb_s,
-                props.right?.memory_bandwidth_gb_s,
-                'GB/s'
-            )}
+            <NumberCompareItem
+                label="显存带宽"
+                leftValue={props.left?.memory_bandwidth_gb_s}
+                rightValue={props.right?.memory_bandwidth_gb_s}
+                unit="GB/s"
+                showDiffOnly={props.showDiffOnly}
+            />
 
-            {renderComparisonItem(
-                "显存类型",
-                props.left?.memory_type ?? 'N/A',
-                props.right?.memory_type ?? 'N/A'
-            )}
+            <StringCompareItem
+                label="显存类型"
+                leftValue={props.left?.memory_type}
+                rightValue={props.right?.memory_type}
+                showDiffOnly={props.showDiffOnly}
+            />
 
             <Divider orientation="horizontal">计算单元</Divider>
 
-            {renderComparisonItem(
-                "着色单元",
-                props.left?.shading_units,
-                props.right?.shading_units
-            )}
+            <NumberCompareItem
+                label="着色单元"
+                leftValue={props.left?.shading_units}
+                rightValue={props.right?.shading_units}
+                showDiffOnly={props.showDiffOnly}
+            />
 
-            {renderComparisonItem(
-                "纹理映射单元",
-                props.left?.texture_mapping_units,
-                props.right?.texture_mapping_units
-            )}
+            <NumberCompareItem
+                label="纹理映射单元"
+                leftValue={props.left?.texture_mapping_units}
+                rightValue={props.right?.texture_mapping_units}
+                showDiffOnly={props.showDiffOnly}
+            />
 
-            {renderComparisonItem(
-                "渲染输出处理器",
-                props.left?.render_output_processors,
-                props.right?.render_output_processors
-            )}
+            <NumberCompareItem
+                label="渲染输出处理器"
+                leftValue={props.left?.render_output_processors}
+                rightValue={props.right?.render_output_processors}
+                showDiffOnly={props.showDiffOnly}
+            />
 
-            {renderComparisonItem(
-                "流式多处理器",
-                props.left?.streaming_multiprocessors,
-                props.right?.streaming_multiprocessors
-            )}
+            <NumberCompareItem
+                label="流式多处理器"
+                leftValue={props.left?.streaming_multiprocessors}
+                rightValue={props.right?.streaming_multiprocessors}
+                showDiffOnly={props.showDiffOnly}
+            />
 
-            {renderComparisonItem(
-                "张量核心",
-                props.left?.tensor_cores,
-                props.right?.tensor_cores
-            )}
+            <NumberCompareItem
+                label="张量核心"
+                leftValue={props.left?.tensor_cores}
+                rightValue={props.right?.tensor_cores}
+                showDiffOnly={props.showDiffOnly}
+            />
 
-            {renderComparisonItem(
-                "光线追踪核心",
-                props.left?.ray_tracing_cores,
-                props.right?.ray_tracing_cores
-            )}
+            <NumberCompareItem
+                label="光线追踪核心"
+                leftValue={props.left?.ray_tracing_cores}
+                rightValue={props.right?.ray_tracing_cores}
+                showDiffOnly={props.showDiffOnly}
+            />
 
             <Divider orientation="horizontal">缓存</Divider>
 
-            {renderComparisonItem(
-                "一级缓存",
-                props.left?.l1_cache_kb,
-                props.right?.l1_cache_kb,
-                'KB'
-            )}
+            <NumberCompareItem
+                label="一级缓存"
+                leftValue={props.left?.l1_cache_kb}
+                rightValue={props.right?.l1_cache_kb}
+                unit="KB"
+                showDiffOnly={props.showDiffOnly}
+            />
 
-            {renderComparisonItem(
-                "二级缓存",
-                props.left?.l2_cache_mb,
-                props.right?.l2_cache_mb,
-                'MB'
-            )}
+            <NumberCompareItem
+                label="二级缓存"
+                leftValue={props.left?.l2_cache_mb}
+                rightValue={props.right?.l2_cache_mb}
+                unit="MB"
+                showDiffOnly={props.showDiffOnly}
+            />
 
             <Divider orientation="horizontal">物理规格</Divider>
 
-            {renderComparisonItem(
-                "热设计功耗",
-                props.left?.thermal_design_power_w,
-                props.right?.thermal_design_power_w,
-                'W',
-                (leftValue, rightValue) => {
-                    return leftValue <= rightValue
-                }
-            )}
+            <NumberCompareItem
+                label="热设计功耗"
+                leftValue={props.left?.thermal_design_power_w}
+                rightValue={props.right?.thermal_design_power_w}
+                unit="W"
+                numberCompare={(left, right) => left < right}
+                showDiffOnly={props.showDiffOnly}
+            />
 
-            {renderComparisonItem(
-                "板卡长度",
-                props.left?.board_length_mm,
-                props.right?.board_length_mm,
-                'mm'
-            )}
+            <NumberCompareItem
+                label="板卡长度"
+                leftValue={props.left?.board_length_mm}
+                rightValue={props.right?.board_length_mm}
+                unit="mm"
+                showDiffOnly={props.showDiffOnly}
+            />
 
-            {renderComparisonItem(
-                "板卡宽度",
-                props.left?.board_width_mm,
-                props.right?.board_width_mm,
-                'mm'
-            )}
+            <NumberCompareItem
+                label="板卡宽度"
+                leftValue={props.left?.board_width_mm}
+                rightValue={props.right?.board_width_mm}
+                unit="mm"
+                showDiffOnly={props.showDiffOnly}
+            />
 
-            {renderComparisonItem(
-                "板卡插槽宽度",
-                props.left?.board_slot_width ?? 'N/A',
-                props.right?.board_slot_width ?? 'N/A'
-            )}
+            <StringCompareItem
+                label="板卡插槽宽度"
+                leftValue={props.left?.board_slot_width}
+                rightValue={props.right?.board_slot_width}
+                showDiffOnly={props.showDiffOnly}
+            />
 
-            {renderComparisonItem(
-                "建议电源功率",
-                props.left?.suggested_psu_w,
-                props.right?.suggested_psu_w,
-                'W',
-                (leftValue, rightValue) => {
-                    return leftValue <= rightValue
-                }
-            )}
+            <NumberCompareItem
+                label="建议电源功率"
+                leftValue={props.left?.suggested_psu_w}
+                rightValue={props.right?.suggested_psu_w}
+                unit="W"
+                numberCompare={(left, right) => left < right}
+                showDiffOnly={props.showDiffOnly}
+            />
 
-            {renderComparisonItem(
-                "电源接口",
-                props.left?.power_connectors ?? 'N/A',
-                props.right?.power_connectors ?? 'N/A'
-            )}
+            <StringCompareItem
+                label="电源接口"
+                leftValue={props.left?.power_connectors}
+                rightValue={props.right?.power_connectors}
+                showDiffOnly={props.showDiffOnly}
+            />
 
-            {renderComparisonItem(
-                "显示接口",
-                props.left?.display_connectors ?? 'N/A',
-                props.right?.display_connectors ?? 'N/A'
-            )}
+            <StringCompareItem
+                label="显示接口"
+                leftValue={props.left?.display_connectors}
+                rightValue={props.right?.display_connectors}
+                showDiffOnly={props.showDiffOnly}
+            />
 
             <Divider orientation="horizontal">API支持</Divider>
 
-            {renderComparisonItem(
-                "DirectX版本",
-                props.left?.directx_major_version !== undefined && props.left?.directx_minor_version !== undefined
-                    ? `${props.left?.directx_major_version}.${props.left?.directx_minor_version}`
-                    : 'N/A',
-                props.right?.directx_major_version !== undefined && props.right?.directx_minor_version !== undefined
-                    ? `${props.right?.directx_major_version}.${props.right?.directx_minor_version}`
-                    : 'N/A'
-            )}
+            <StringCompareItem
+                label="DirectX版本"
+                leftValue={versionStringify(props.left?.directx_major_version, props.left?.directx_minor_version)}
+                rightValue={versionStringify(props.right?.directx_major_version, props.right?.directx_minor_version)}
+                showDiffOnly={props.showDiffOnly}
+            />
 
-            {renderComparisonItem(
-                "OpenGL版本",
-                props.left?.opengl_major_version !== undefined && props.left?.opengl_minor_version !== undefined
-                    ? `${props.left?.opengl_major_version}.${props.left?.opengl_minor_version}`
-                    : 'N/A',
-                props.right?.opengl_major_version !== undefined && props.right?.opengl_minor_version !== undefined
-                    ? `${props.right?.opengl_major_version}.${props.right?.opengl_minor_version}`
-                    : 'N/A'
-            )}
+            <StringCompareItem
+                label="OpenGL版本"
+                leftValue={versionStringify(props.left?.opengl_major_version, props.left?.opengl_minor_version)}
+                rightValue={versionStringify(props.right?.opengl_major_version, props.right?.opengl_minor_version)}
+                showDiffOnly={props.showDiffOnly}
+            />
 
-            {renderComparisonItem(
-                "Vulkan版本",
-                props.left?.vulkan_major_version !== undefined && props.left?.vulkan_minor_version !== undefined
-                    ? `${props.left?.vulkan_major_version}.${props.left?.vulkan_minor_version}`
-                    : 'N/A',
-                props.right?.vulkan_major_version !== undefined && props.right?.vulkan_minor_version !== undefined
-                    ? `${props.right?.vulkan_major_version}.${props.right?.vulkan_minor_version}`
-                    : 'N/A'
-            )}
+            <StringCompareItem
+                label="Vulkan版本"
+                leftValue={versionStringify(props.left?.vulkan_major_version, props.left?.vulkan_minor_version)}
+                rightValue={versionStringify(props.right?.vulkan_major_version, props.right?.vulkan_minor_version)}
+                showDiffOnly={props.showDiffOnly}
+            />
 
-            {renderComparisonItem(
-                "OpenCL版本",
-                props.left?.opencl_major_version !== undefined && props.left?.opencl_minor_version !== undefined
-                    ? `${props.left?.opencl_major_version}.${props.left?.opencl_minor_version}`
-                    : 'N/A',
-                props.right?.opencl_major_version !== undefined && props.right?.opencl_minor_version !== undefined
-                    ? `${props.right?.opencl_major_version}.${props.right?.opencl_minor_version}`
-                    : 'N/A'
-            )}
+            <StringCompareItem
+                label="OpenCL版本"
+                leftValue={versionStringify(props.left?.opencl_major_version, props.left?.opencl_minor_version)}
+                rightValue={versionStringify(props.right?.opencl_major_version, props.right?.opencl_minor_version)}
+                showDiffOnly={props.showDiffOnly}
+            />
 
-            {renderComparisonItem(
-                "CUDA版本",
-                props.left?.cuda_major_version !== undefined && props.left?.cuda_minor_version !== undefined
-                    ? `${props.left?.cuda_major_version}.${props.left?.cuda_minor_version}`
-                    : 'N/A',
-                props.right?.cuda_major_version !== undefined && props.right?.cuda_minor_version !== undefined
-                    ? `${props.right?.cuda_major_version}.${props.right?.cuda_minor_version}`
-                    : 'N/A'
-            )}
+            <StringCompareItem
+                label="CUDA版本"
+                leftValue={versionStringify(props.left?.cuda_major_version, props.left?.cuda_minor_version)}
+                rightValue={versionStringify(props.right?.cuda_major_version, props.right?.cuda_minor_version)}
+                showDiffOnly={props.showDiffOnly}
+            />
 
             <Divider orientation="horizontal">性能指标</Divider>
 
-            {renderComparisonItem(
-                "像素率",
-                props.left?.pixel_rate_gpixel_s,
-                props.right?.pixel_rate_gpixel_s,
-                'GPixel/s'
-            )}
+            <NumberCompareItem
+                label="像素率"
+                leftValue={props.left?.pixel_rate_gpixel_s}
+                rightValue={props.right?.pixel_rate_gpixel_s}
+                unit="GPixel/s"
+                showDiffOnly={props.showDiffOnly}
+            />
 
-            {renderComparisonItem(
-                "纹理率",
-                props.left?.texture_rate_gtexel_s,
-                props.right?.texture_rate_gtexel_s,
-                'GTexel/s'
-            )}
+            <NumberCompareItem
+                label="纹理率"
+                leftValue={props.left?.texture_rate_gtexel_s}
+                rightValue={props.right?.texture_rate_gtexel_s}
+                unit="GTexel/s"
+                showDiffOnly={props.showDiffOnly}
+            />
 
-            {renderComparisonItem(
-                "半精度性能",
-                props.left?.half_float_performance_gflop_s,
-                props.right?.half_float_performance_gflop_s,
-                'GFLOPS'
-            )}
+            <NumberCompareItem
+                label="半精度性能"
+                leftValue={props.left?.half_float_performance_gflop_s}
+                rightValue={props.right?.half_float_performance_gflop_s}
+                unit="GFLOPS"
+                showDiffOnly={props.showDiffOnly}
+            />
 
-            {renderComparisonItem(
-                "单精度性能",
-                props.left?.single_float_performance_gflop_s,
-                props.right?.single_float_performance_gflop_s,
-                'GFLOPS'
-            )}
+            <NumberCompareItem
+                label="单精度性能"
+                leftValue={props.left?.single_float_performance_gflop_s}
+                rightValue={props.right?.single_float_performance_gflop_s}
+                unit="GFLOPS"
+                showDiffOnly={props.showDiffOnly}
+            />
 
-            {renderComparisonItem(
-                "双精度性能",
-                props.left?.double_float_performance_gflop_s,
-                props.right?.double_float_performance_gflop_s,
-                'GFLOPS'
-            )}
+            <NumberCompareItem
+                label="双精度性能"
+                leftValue={props.left?.double_float_performance_gflop_s}
+                rightValue={props.right?.double_float_performance_gflop_s}
+                unit="GFLOPS"
+                showDiffOnly={props.showDiffOnly}
+            />
 
-            {renderComparisonItem(
-                "价格",
-                props.left?.price === undefined ? 'N/A' :
-                    typeof props.left?.price === 'number' ? "$" + props.left?.price : props.left?.price,
-                props.right?.price === undefined ? 'N/A' :
-                    typeof props.right?.price === 'number' ? "$" + props.right?.price : props.right?.price
-            )}
+            <CompareItem<string | number | undefined>
+                label="价格"
+                leftValue={props.left?.price}
+                rightValue={props.right?.price}
+                format={formatDollar}
+                compare={(left, right) => {
+                    if (left === undefined || right === undefined) return undefined
+                    if (left === right) return undefined
+                    const leftNumber = extractFirstNumber(left)
+                    const rightNumber = extractFirstNumber(right)
+                    if (leftNumber === rightNumber) return undefined
+                    if (isNaN(leftNumber) || isNaN(rightNumber)) return undefined
+
+                    const bigger = Math.max(leftNumber, rightNumber);
+                    if (leftNumber < rightNumber) {
+                        return {
+                            winner: 'left',
+                            winnerRatio: leftNumber / bigger,
+                            loserRatio: rightNumber / bigger
+                        }
+                    } else {
+                        return {
+                            winner: 'right',
+                            winnerRatio: rightNumber / bigger,
+                            loserRatio: leftNumber / bigger
+                        }
+                    }
+                }}
+                showDiffOnly={props.showDiffOnly}
+            />
         </div>
     );
 }
