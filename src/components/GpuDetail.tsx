@@ -1,6 +1,6 @@
 import type {GpuSpec} from "../data/gpu_specs.ts";
 import {Descriptions, Divider} from 'antd';
-import {formatValueWithUnit} from "../utils/format.ts";
+import {formatDollar, formatValueWithUnit, versionStringify} from "../utils/format.ts";
 
 export function GpuDetail(props: {
     gpu: GpuSpec
@@ -28,10 +28,7 @@ export function GpuDetail(props: {
                     label="发布日期">{gpu.release_date ? new Date(gpu.release_date).toLocaleDateString() : 'N/A'}</Descriptions.Item>
                 <Descriptions.Item label="总线接口">{gpu.bus_interface ?? 'N/A'}</Descriptions.Item>
 
-                <Descriptions.Item label="价格">{
-                    gpu.price === undefined ? 'N/A' :
-                        typeof gpu.price === 'number' ? "$" + gpu.price : gpu.price
-                }</Descriptions.Item>
+                <Descriptions.Item label="价格">{formatDollar(gpu.price)}</Descriptions.Item>
 
                 {gpu.tpu_url && (
                     <Descriptions.Item label="TechPowerUp链接">
@@ -98,31 +95,21 @@ export function GpuDetail(props: {
             </Descriptions>
 
             <Divider orientation="horizontal">API支持</Divider>
-            <Descriptions bordered column={1} size="small" labelStyle={{width: '50%'}}>
+            <Descriptions bordered column={1} size="small" labelStyle={{ width: '50%' }}>
                 <Descriptions.Item label="DirectX版本">
-                    {gpu.directx_major_version !== undefined && gpu.directx_minor_version !== undefined
-                        ? `${gpu.directx_major_version}.${gpu.directx_minor_version}`
-                        : 'N/A'}
+                    {versionStringify(gpu.directx_major_version, gpu.directx_minor_version)}
                 </Descriptions.Item>
                 <Descriptions.Item label="OpenGL版本">
-                    {gpu.opengl_major_version !== undefined && gpu.opengl_minor_version !== undefined
-                        ? `${gpu.opengl_major_version}.${gpu.opengl_minor_version}`
-                        : 'N/A'}
+                    {versionStringify(gpu.opengl_major_version, gpu.opengl_minor_version)}
                 </Descriptions.Item>
                 <Descriptions.Item label="Vulkan版本">
-                    {gpu.vulkan_major_version !== undefined && gpu.vulkan_minor_version !== undefined
-                        ? `${gpu.vulkan_major_version}.${gpu.vulkan_minor_version}`
-                        : 'N/A'}
+                    {versionStringify(gpu.vulkan_major_version, gpu.vulkan_minor_version)}
                 </Descriptions.Item>
                 <Descriptions.Item label="OpenCL版本">
-                    {gpu.opencl_major_version !== undefined && gpu.opencl_minor_version !== undefined
-                        ? `${gpu.opencl_major_version}.${gpu.opencl_minor_version}`
-                        : 'N/A'}
+                    {versionStringify(gpu.opencl_major_version, gpu.opencl_minor_version)}
                 </Descriptions.Item>
                 <Descriptions.Item label="CUDA版本">
-                    {gpu.cuda_major_version !== undefined && gpu.cuda_minor_version !== undefined
-                        ? `${gpu.cuda_major_version}.${gpu.cuda_minor_version}`
-                        : 'N/A'}
+                    {versionStringify(gpu.cuda_major_version, gpu.cuda_minor_version)}
                 </Descriptions.Item>
             </Descriptions>
 
