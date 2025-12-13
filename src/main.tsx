@@ -1,7 +1,7 @@
 import {createRoot} from 'react-dom/client'
 import './index.css'
 import {HashRouter, Route, Routes} from "react-router"
-import GpuPage from "./pages/GpuPage.tsx"
+import GpuTablePage from "./pages/GpuTablePage.tsx"
 import App from "./App.tsx"
 import {HomePage} from "./pages/HomePage.tsx"
 import {BrandsPage} from "./pages/BrandsPage.tsx"
@@ -14,7 +14,7 @@ createRoot(document.getElementById('root')!).render(
         <Routes>
             <Route path='/' element={<App/>}>
                 <Route index={true} element={<HomePage/>}/>
-                <Route path='/gpu' element={<GpuPage/>}/>
+                <Route path='/gpu' element={<GpuTablePage/>}/>
                 <Route path='/gpu/:id' element={<GpuDetailPage/>}/>
                 <Route path='/gpu/compare' element={<GpuComparePage/>}/>
                 <Route path='/brands' element={<BrandsPage/>}/>

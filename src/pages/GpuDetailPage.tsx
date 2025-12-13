@@ -1,5 +1,5 @@
 import {useNavigate, useParams} from "react-router";
-import { GpuInfo } from "../components/GpuInfo.tsx";
+import { GpuDetail } from "../components/GpuDetail.tsx";
 import { defaultGpuSpecs } from "../data/gpu_specs.ts";
 import { useEffect, useState } from "react";
 import type { GpuSpec } from "../data/gpu_specs.ts";
@@ -31,7 +31,7 @@ export function GpuDetailPage() {
                 <h1>{gpu.name}</h1>
                 <Button onClick={() => handleCompareClick(gpu.id)}>与其他GPU进行比较</Button>
             </div>
-            <GpuInfo gpu={gpu} />
+            <GpuDetail gpu={gpu} />
         </div>
     );
 }

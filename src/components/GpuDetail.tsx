@@ -2,7 +2,7 @@ import type {GpuSpec} from "../data/gpu_specs.ts";
 import {Descriptions, Divider} from 'antd';
 import {formatValueWithUnit} from "../utils/format.ts";
 
-export function GpuInfo(props: {
+export function GpuDetail(props: {
     gpu: GpuSpec
 }) {
     const {gpu} = props;
