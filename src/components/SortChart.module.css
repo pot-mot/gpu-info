@@ -1,0 +1,43 @@
+.container {
+    width: 100%;
+    overflow-x: auto;
+    height: 600px;
+}
+
+.bars {
+    min-width: max-content;
+    display: flex;
+    height: 100%;
+}
+
+.bar {
+    height: 100%;
+    width: 5rem;
+}
+
+.barValueWrapper {
+    height: calc(100% - 6rem);
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+}
+
+.barValue {
+    width: 1rem;
+    background-color: #4CAF50;
+}
+
+.barLabel {
+    text-align: center;
+}
+
+.label {
+    text-align: center;
+    max-height: 6rem;
+    overflow: hidden;
+}
+
+
+.label:hover {
+    color: #667eea;
+}
