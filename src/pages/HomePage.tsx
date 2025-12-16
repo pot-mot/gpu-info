@@ -2,6 +2,7 @@ import {defaultGpuSpecs} from '../data/gpu_specs.ts'
 import {numberSorter} from "../utils/number.ts";
 import {useNavigate} from "react-router";
 import {formatDollar} from "../utils/format.ts";
+import {GpuVote} from "../components/GpuVote.tsx";
 
 const GOOD_GPU_YEAR_DIFF = 1
 const GOOD_GPU_MEMORY_SIZE_GB = 12
@@ -50,6 +51,7 @@ export function HomePage() {
                                 <p><strong>显存</strong> {gpu.memory_size_gb} GB ({gpu.memory_type})</p>
                                 <p><strong>发布于</strong> {gpu.release_date ? new Date(gpu.release_date).toLocaleDateString() : ''}</p>
                                 <p><strong>价格</strong> {formatDollar(gpu.price)}</p>
+                                <GpuVote id={gpu.id} />
                             </div>
                         </div>
                     ))}

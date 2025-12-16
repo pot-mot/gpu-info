@@ -4,6 +4,7 @@ import {GpuSelect} from "../components/GpuSelect.tsx";
 import {useSearchParams} from "react-router";
 import {GpuCompareView} from "../components/GpuCompareView.tsx";
 import {Switch} from "antd";
+import {GpuVote} from "../components/GpuVote.tsx";
 
 export function GpuComparePage() {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -53,6 +54,17 @@ export function GpuComparePage() {
                         fontWeight: '600',
                     }}
                 />
+            </div>
+
+            <div
+                style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    padding: '0.5rem 0',
+                }}
+            >
+                {leftGpu !== undefined ? <GpuVote id={leftGpu.id}/> : <div></div>}
+                {rightGpu !== undefined ? <GpuVote id={rightGpu.id}/> : <div></div>}
             </div>
 
             <div style={{ textAlign: 'center', margin: '0.5rem 0' }}>

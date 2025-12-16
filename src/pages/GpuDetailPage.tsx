@@ -4,6 +4,7 @@ import { defaultGpuSpecs } from "../data/gpu_specs.ts";
 import { useEffect, useState } from "react";
 import type { GpuSpec } from "../data/gpu_specs.ts";
 import {Button} from "antd";
+import {GpuVote} from "../components/GpuVote.tsx";
 
 export function GpuDetailPage() {
     const navigate = useNavigate();
@@ -29,9 +30,15 @@ export function GpuDetailPage() {
         <div>
             <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
                 <h1>{gpu.name}</h1>
+
                 <Button onClick={() => handleCompareClick(gpu.id)}>与其他GPU进行比较</Button>
             </div>
+
             <GpuDetail gpu={gpu} />
+
+            <div style={{ paddingTop: '1rem', display: 'flex', justifyContent: 'center'}}>
+                <GpuVote id={gpu.id}/>
+            </div>
         </div>
     );
 }
