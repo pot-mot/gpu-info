@@ -67,19 +67,13 @@ export function BrandAggregateView(props: {
     const firstManufacturerYearGpus = manufacturerYearGpus.entries().next().value
     const firstShowManufacturer = firstManufacturerYearGpus?.[0]
     const firstYearGpus = firstManufacturerYearGpus?.[1]
-    let firstShowYear: number | undefined
-    let firstShowGpus: GpuSpec[] | undefined
-    if (firstYearGpus !== undefined) {
-        const {minYear, maxYear} = getYearRange(firstYearGpus)
-        if (minYear === undefined || maxYear === undefined) return
-        const gpus = firstYearGpus.get(maxYear)
-        firstShowYear = maxYear
-        firstShowGpus = gpus
-    }
-
+    const {maxYear} = getYearRange(firstYearGpus ?? new Map())
     const [showManufacturer, setShowManufacturer] = useState<string | undefined>(firstShowManufacturer)
-    const [showYear, setShowYear] = useState<number | undefined>(firstShowYear)
-    const [showGpuSpecs, setShowGpuSpecs] = useState<GpuSpec[] | undefined>(firstShowGpus)
+    const [showYear, setShowYear] = useState<number | undefined>(maxYear)
+    const [showGpuSpecs, setShowGpuSpecs] = useState<GpuSpec[] | undefined>(() => {
+        if (maxYear === undefined) return
+        return firstYearGpus?.get(maxYear)
+    })
 
     const handleManufacturerChange = (manufacturer: string) => {
         setShowManufacturer(manufacturer)
