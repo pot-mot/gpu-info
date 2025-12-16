@@ -145,6 +145,89 @@ body {
     font-size: 0.9rem;
 }
 
+/* 趋势卡片样式 */
+.trend-card, .application-card, .brand-card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.trend-card:hover, .application-card:hover, .brand-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.trend-card h3, .application-card h3, .brand-card h3 {
+    color: #667eea;
+    margin-bottom: 1rem;
+}
+
+/* 技术趋势区域 */
+.trends-section {
+    background-color: #f8f9fa;
+    padding: 2rem;
+    border-radius: 8px;
+}
+
+/* 新闻列表样式 */
+.news-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.news-item {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.news-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.news-item h3 {
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.news-item p {
+    color: #666;
+    margin-bottom: 0.5rem;
+}
+
+.news-date {
+    color: #999;
+    font-size: 0.8rem;
+    display: block;
+    text-align: right;
+}
+
+/* 关于我们样式 */
+.about-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.about-section {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+}
+
+.about-section h3 {
+    color: #667eea;
+    margin-bottom: 1rem;
+}
+
 /* 响应式设计 */
 @media (max-width: 768px) {
     .app-header {
