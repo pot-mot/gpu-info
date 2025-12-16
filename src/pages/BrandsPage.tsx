@@ -1,4 +1,9 @@
+import {Button} from "antd";
+import {useNavigate} from "react-router";
+
 export function BrandsPage() {
+    const navigate = useNavigate();
+
     return (
         <div className="page-container">
             <h2 className="page-title">GPU品牌</h2>
@@ -15,11 +20,9 @@ export function BrandsPage() {
                     <h3>Intel</h3>
                     <p>通过Arc系列进入独立GPU市场，专注于集成显卡和独立显卡的融合发展。</p>
                 </div>
-                <div className="brand-card">
-                    <h3>ARM</h3>
-                    <p>提供GPU架构授权，广泛应用于移动设备和嵌入式系统。</p>
-                </div>
             </div>
+
+            <Button onClick={() => navigate('/brands/aggregate')}>查看历年发布</Button>
         </div>
     )
 }

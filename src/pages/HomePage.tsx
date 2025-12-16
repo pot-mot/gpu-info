@@ -28,7 +28,7 @@ export function HomePage() {
             }
             return numberSorter(a.price, b.price, "descend")
         })
-        .slice(0, 6)
+        .slice(0, 9)
 
     const handleGpuClick = (gpuId: string) => {
         navigate(`/gpu/${gpuId}`); // 跳转到对应 GPU 的详情页面
@@ -53,24 +53,6 @@ export function HomePage() {
                             </div>
                         </div>
                     ))}
-                </div>
-            </section>
-
-            <section className="section trends-section">
-                <h2 className="section-title">GPU品牌</h2>
-                <div className="trends-grid">
-                    <div className="trend-card">
-                        <h3>NVIDIA</h3>
-                        <p></p>
-                    </div>
-                    <div className="trend-card">
-                        <h3>AMD</h3>
-                        <p></p>
-                    </div>
-                    <div className="trend-card">
-                        <h3>Intel</h3>
-                        <p></p>
-                    </div>
                 </div>
             </section>
         </div>

@@ -1,5 +1,5 @@
 import type {CSSProperties, ReactElement} from "react";
-import styles from './SortChart.module.css';
+import styles from './BarChart.module.css';
 
 export function SortChart<T extends { id: string }>(props: {
     data: T[],
@@ -52,23 +52,24 @@ export function SortChart<T extends { id: string }>(props: {
     const maxValue = Math.max(...topItems.map(i => i.value))
 
     return (
-        <div className={styles.container} style={props.containerStyle}>
+        <div className={styles.container} style={{height: "80vh", ...props.containerStyle}}>
             <div className={styles.bars}>
                 {topItems.map(({item, value}) => (
                     <div
+                        key={item.id}
                         className={styles.bar}
                         style={props.barStyle}
                     >
-                        <div key={item.id} className={styles.barValueWrapper}>
+                        <div className={styles.barValueWrapper}>
                             <div
                                 className={styles.barValue}
                                 style={{height: value * 100 / maxValue + "%"}}
                             />
-                            <span className={styles.barLabel}>
+                            <div className={styles.barLabel}>
                                 {props.value(item)}
-                            </span>
+                            </div>
                         </div>
-                        <div className={styles.label}>
+                        <div className={`${styles.label} ${styles.hoverStyle}`} style={{height: "6rem"}}>
                             {props.label(item)}
                         </div>
                     </div>

@@ -1,7 +1,6 @@
 .container {
     width: 100%;
     overflow-x: auto;
-    height: 600px;
 }
 
 .bars {
@@ -13,10 +12,11 @@
 .bar {
     height: 100%;
     width: 5rem;
+    display: grid;
+    grid-template-rows: 1fr auto;
 }
 
 .barValueWrapper {
-    height: calc(100% - 6rem);
     display: flex;
     flex-direction: column-reverse;
     align-items: center;
@@ -33,11 +33,13 @@
 
 .label {
     text-align: center;
-    max-height: 6rem;
     overflow: hidden;
 }
 
-
-.label:hover {
+.label.hoverStyle:hover {
     color: #667eea;
+}
+
+.label.activeStyle {
+    color: #4b98fb;
 }
