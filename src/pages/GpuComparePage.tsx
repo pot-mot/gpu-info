@@ -1,15 +1,17 @@
 import {useState} from "react";
 import {defaultGpuSpecs, type GpuSpec} from "../data/gpu_specs.ts";
 import {GpuSelect} from "../components/GpuSelect.tsx";
-import {useSearchParams} from "react-router";
+import {useNavigate, useSearchParams} from "react-router";
 import {GpuCompareView} from "../components/GpuCompareView.tsx";
-import {Switch} from "antd";
+import {Button, Switch} from "antd";
 import {GpuVote} from "../components/GpuVote.tsx";
 
 export function GpuComparePage() {
     const [searchParams, setSearchParams] = useSearchParams();
     const leftId = searchParams.get('left')
     const rightId = searchParams.get('right')
+
+    const navigate = useNavigate();
 
     const [gpuSpecs] = useState(defaultGpuSpecs)
     const [leftGpu, setLeftGpu] = useState<GpuSpec | undefined>(gpuSpecs.find(spec => spec.id === leftId))
@@ -63,8 +65,14 @@ export function GpuComparePage() {
                     padding: '0.5rem 0',
                 }}
             >
-                {leftGpu !== undefined ? <GpuVote id={leftGpu.id}/> : <div></div>}
-                {rightGpu !== undefined ? <GpuVote id={rightGpu.id}/> : <div></div>}
+                {leftGpu !== undefined ? <div style={{display: 'flex', gap: '0.5rem'}}>
+                    <Button onClick={() => {navigate(`/gpu/${leftGpu.id}`)}}>前往页面</Button>
+                    <GpuVote id={leftGpu.id}/>
+                </div> : <div/>}
+                {rightGpu !== undefined ? <div style={{display: 'flex', gap: '0.5rem'}}>
+                    <GpuVote id={rightGpu.id}/>
+                    <Button onClick={() => {navigate(`/gpu/${rightGpu.id}`)}}>前往页面</Button>
+                </div> : <div/>}
             </div>
 
             <div style={{ textAlign: 'center', margin: '0.5rem 0' }}>
