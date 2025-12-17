@@ -1,4 +1,5 @@
-import {Link, Outlet} from "react-router";
+import {Link} from "react-router";
+import KeepAliveRouteOutlet from "keepalive-for-react-router";
 
 function App() {
     return <>
@@ -14,7 +15,7 @@ function App() {
             </header>
 
             <main className="app-main">
-                <Outlet />
+                <KeepAliveRouteOutlet />
             </main>
         </div>
     </>
